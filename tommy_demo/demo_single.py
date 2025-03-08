@@ -32,22 +32,37 @@ def create_gpt_prompt(directory_tree):
     "Based on the provided directory tree, predict the user's occupation and suggest an improved folder hierarchy that categorizes the files appropriately. "
     "Ensure that the proposed structure does not exceed three levels of depth. "
     "Respond only with the proposed folder structure in a hierarchical format.\n\n"
+    "If the response is too long, only output as much as you can and continue in the next response."
+    "When all files are outputted, write 'END_OF_STRUCTURE' at the end."
     f"Current Directory Tree:\n{directory_tree}\n\n"
     "Proposed Organized Folder Structure:"
     )
     return prompt
 
 def get_gpt_suggestion(prompt):
-    """Obtains GPT-4's suggested folder structure."""
+    """Obtains GPT-4's suggested folder structure iteratively to avoid truncation."""
+    full_response = ""
+    continuation_prompt = "\nContinue listing from where you left off."
+
     try:
-        response = client.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "system", "content": prompt}
-            ]
-        )
-        suggestion = response.choices[0].message.content.strip()
-        return suggestion
+        while True:
+            response = client.chat.completions.create(
+                model="gpt-4",
+                messages=[
+                    {"role": "system", "content": prompt + full_response + continuation_prompt}
+                ]
+            )
+            new_content = response.choices[0].message.content.strip()
+
+            # Append the new content
+            full_response += "\n" + new_content
+
+            # If the output seems complete, stop requesting more
+            if 'END_OF_STRUCTURE' in new_content or len(new_content) < 100:
+                break
+
+        return full_response.replace('END_OF_STRUCTURE', "").strip()
+
     except Exception as e:
         print(f"Error obtaining GPT-4 suggestion: {e}")
         return None
