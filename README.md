@@ -8,3 +8,10 @@
 
 
 
+# Team plan
+
+1. Team member testing the idea using a python script(OpenAI key)and use their own download folder to test the AI's ability to organize files.
+2. 
+
+
+
