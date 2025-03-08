@@ -11,6 +11,11 @@
 # Team plan
 
 1. Team member testing the idea using a python script(OpenAI key)and use their own download folder to test the AI's ability to organize files.
-2. 
+2. Decide on the best AI model to use for the project.
+3. Develop the front end of the project.
 
+
+# Team progress
+
+1. one team member decided to go with file-name only approach to organize files.
 
