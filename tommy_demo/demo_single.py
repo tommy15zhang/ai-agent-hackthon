@@ -26,7 +26,7 @@ def generate_directory_tree(start_path):
     return '\n'.join(tree)
 
 def create_gpt_prompt(directory_tree):
-    """Creates a prompt for GPT-4 to suggest an organized folder structure."""
+    """Creates a prompt for GPT-4o to suggest an organized folder structure."""
     prompt = (
     "You are an intelligent system designed to optimize and organize directory structures. "
     "Based on the provided directory tree, predict the user's occupation and suggest an improved folder hierarchy that categorizes the files appropriately. "
