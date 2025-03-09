@@ -7,6 +7,7 @@ from docx import Document
 import PyPDF2
 from PIL import Image
 from pptx import Presentation
+import shutil
 
 # Initialize OpenAI client
 api_key = os.environ.get("OPENAI_API_KEY")
@@ -19,7 +20,7 @@ def encode_resized_image(file_path, size=(128, 128)):
             img = img.convert("RGB")  # Ensure RGB format for compatibility
 
             # Resize only for encoding, preserving the original image
-            img_resized = img.resize(size, Image.ANTIALIAS)
+            img_resized = img.resize(size)
 
             # Save the resized image to a temporary buffer
             buffered = BytesIO()
