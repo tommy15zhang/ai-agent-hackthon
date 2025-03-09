@@ -1,10 +1,8 @@
 import os
 from Read_file import AI_Response
 
-folder_path = "C:/Users/jacky/Desktop/Test files" 
+folder_path = "C:/Users/dcies/Desktop/test_downloads" 
 files = os.listdir(folder_path)
-
-api_key = os.environ.get("OPENAI_API_KEY")
 
 def execute_commands(commands):
     # Split the input into individual commands based on 'n'

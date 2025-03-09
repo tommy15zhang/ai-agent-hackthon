@@ -7,13 +7,16 @@ from docx import Document
 import PyPDF2
 from PIL import Image
 from pptx import Presentation
+from dotenv import load_dotenv
 
-# Define folder path
-folder_path = "C:/Users/jacky/Desktop/Test files"
+folder_path = "C:/Users/dcies/Desktop/test_downloads" 
 files = os.listdir(folder_path)
 
-# Initialize OpenAI client
-api_key = os.environ.get("OPENAI_API_KEY")
+# Load environment variables from .env file
+load_dotenv()
+
+# Get OpenAI API key from environment variables
+api_key = os.getenv('OPENAI_API_KEY')
 client = OpenAI()
 
 # Function to resize and encode image in Base64 (without modifying the original file)
@@ -23,7 +26,7 @@ def encode_resized_image(file_path, size=(128, 128)):
             img = img.convert("RGB")  # Ensure RGB format for compatibility
 
             # Resize only for encoding, preserving the original image
-            img_resized = img.resize(size, Image.ANTIALIAS)
+            img_resized = img.resize(size)
 
             # Save the resized image to a temporary buffer
             buffered = BytesIO()
