@@ -2,15 +2,15 @@ import os
 import shutil
 import openai
 from datetime import datetime
-from dotenv import load_dotenv
+
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from collections import defaultdict
 import threading
 
 # Load environment variables
-load_dotenv()
-openai.api_key = os.getenv('OPENAI_API_KEY')
+
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 def get_file_metadata(folder_path):
     files_metadata = []
