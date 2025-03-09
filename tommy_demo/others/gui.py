@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog, scrolledtext, messagebox
-from demo_single import generate_directory_tree, create_gpt_prompt, get_gpt_suggestion, parse_and_organize_files
+from text_based_prediction import generate_directory_tree, create_gpt_prompt, get_gpt_suggestion, parse_and_organize_files
 
 def select_directory():
     directory = filedialog.askdirectory()

@@ -7,11 +7,14 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
+from one_folder_tool import flatten_directory
 
 # Import backend functions
 from demo_single import create_gpt_prompt, get_gpt_suggestion, parse_and_organize_files
 
 from tree_structure import generate_directory_tree
+
+from Read_file import AI_Response, execute_commands
 import dan
 class GenerateStructureThread(QThread):
     """Background thread to generate the proposed structure without freezing the UI."""
@@ -118,6 +121,12 @@ class DirectoryOrganizerGUI(QMainWindow):
         self.execute_button.setStyleSheet("background-color: #FF5722; color: white; font-weight: bold; padding: 10px; border-radius: 5px;")
         self.execute_button.clicked.connect(self.execute_organization)
         layout.addWidget(self.execute_button)
+        
+         # **New: Add Flatten Directory Button**
+        self.flatten_button = QPushButton("\u2699 Flatten Directory")
+        self.flatten_button.setStyleSheet("background-color: #9C27B0; color: white; font-weight: bold; padding: 10px; border-radius: 5px;")
+        self.flatten_button.clicked.connect(self.flatten_directory)
+        layout.addWidget(self.flatten_button)
 
     def set_mode(self, mode):
         self.mode = mode
@@ -185,6 +194,24 @@ class DirectoryOrganizerGUI(QMainWindow):
                 QMessageBox.information(self, "Success", "Directory organized successfully.")
         else:
             QMessageBox.warning(self, "Warning", "Please generate a proposed structure first.")
+
+    def flatten_directory(self):
+        """Calls the external flatten_directory function and updates UI."""
+        if not self.base_dir:
+            QMessageBox.warning(self, "Warning", "Please select a base directory first.")
+            return
+
+        confirm = QMessageBox.question(self, "Confirm Flattening", "Are you sure you want to flatten the directory?", QMessageBox.Yes | QMessageBox.No)
+        if confirm == QMessageBox.Yes:
+            self.progress_bar.setValue(0)
+
+            try:
+                result = flatten_directory(self.base_dir)  # Call imported function
+                self.progress_bar.setValue(100)
+                QMessageBox.information(self, "Success", result)
+                self.display_directory_tree(self.base_dir)  # Refresh tree view
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"Failed to flatten directory: {e}")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
