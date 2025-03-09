@@ -44,7 +44,7 @@ class GenerateStructureThread(QThread):
             proposed_structure = get_gpt_suggestion(prompt)
           
         elif self.mode == "metadata":
-            metadata = dan.get_file_metadata(directory_tree)
+            metadata = dan.get_file_metadata(self.directory)
             prompt = dan.prepare_prompt(metadata)
             proposed_structure = dan.categorize_files_with_gpt4(prompt)
           

@@ -1,14 +1,12 @@
 import os
 from datetime import datetime
 import openai
-from dotenv import load_dotenv
 import shutil
 
 # Load environment variables from .env file
-load_dotenv()
 
 # Get OpenAI API key from environment variables
-openai.api_key = os.getenv('OPENAI_API_KEY')
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 # Function to get metadata of files in a folder
 def get_file_metadata(folder_path):
