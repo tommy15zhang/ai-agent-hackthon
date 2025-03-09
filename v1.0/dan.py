@@ -102,10 +102,3 @@ def main(folder_path):
         move_files_to_hierarchy(folder_path, categorized_files)
     else:
         print("Files were not moved.")
-
-# Set the folder path you want to process
-folder_path = input("Path: ")
-
-# Run the main function
-if __name__ == "__main__":
-    main(folder_path)
