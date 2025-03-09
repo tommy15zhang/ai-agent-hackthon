@@ -43,7 +43,7 @@ def flatten_directory(root_dir):
                 pass  # 目录不为空时会跳过
 
 if __name__ == "__main__":
-    target_dir = "/Users/jiahaozhang/Desktop/Test"
+    target_dir = "C:/Users/jacky/Desktop/Test files"
     if os.path.isdir(target_dir):
         flatten_directory(os.path.abspath(target_dir))
         print("操作完成！")
