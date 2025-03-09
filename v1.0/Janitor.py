@@ -186,7 +186,7 @@ class DirectoryOrganizerGUI(QMainWindow):
                 if self.mode == "name":
                     parse_and_organize_files(proposed_structure, self.base_dir)
                 elif self.mode == "metadata":
-                    dan.move_files_to_hierarchy(self.base_dir, proposed_structure)
+                    dan.move_files(self.base_dir, proposed_structure)
                 elif self.mode == "content":
                     execute_commands(proposed_structure, self.base_dir)
 

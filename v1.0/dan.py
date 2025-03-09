@@ -3,6 +3,8 @@ from datetime import datetime
 import openai
 import shutil
 
+from collections import defaultdict
+import threading
 # Load environment variables from .env file
 
 # Get OpenAI API key from environment variables
@@ -53,29 +55,33 @@ def prepare_prompt(metadata):
     return prompt
 
 # Function to move files into a hierarchical folder structure
-def move_files_to_hierarchy(folder_path, categorized_files):
+def move_files(folder_path, categorized_files):
+    folder_contents = defaultdict(list)
     lines = categorized_files.strip().split("\n")
     
-    file_paths = {}
     for line in lines:
-        parts = line.split(", Path: ")
-        if len(parts) == 2:
-            file_name = parts[0].replace("File: ", "").strip()
-            category_path = parts[1].strip()
-            file_paths[file_name] = category_path
-
-    for file_name, category_path in file_paths.items():
-        full_category_path = os.path.join(folder_path, category_path)
-        
-        # Create necessary subdirectories
-        os.makedirs(full_category_path, exist_ok=True)
-        
-        # Move file into its hierarchical category
-        file_path = os.path.join(folder_path, file_name)
-        if os.path.isfile(file_path):
-            destination_path = os.path.join(full_category_path, file_name)
-            shutil.move(file_path, destination_path)
-            print(f"Moved file {file_name} to {full_category_path}")
+        if ", Path: " in line:
+            file_name, category_path = line.replace("File: ", "").split(", Path: ")
+            file_name, category_path = file_name.strip(), category_path.strip()
+            folder_contents[category_path].append(file_name)
+    
+    # Filter out folders with fewer than two files or two subfolders
+    valid_folders = {k: v for k, v in folder_contents.items() if len(v) >= 2}
+    
+    def move_batch():
+        for category_path, files in valid_folders.items():
+            dest_path = os.path.join(folder_path, *category_path.split('/'))
+            os.makedirs(dest_path, exist_ok=True)
+            for file_name in files:
+                src_file = os.path.join(folder_path, file_name)
+                if os.path.isfile(src_file):
+                    try:
+                        shutil.move(src_file, os.path.join(dest_path, file_name))
+                    except Exception as e:
+                        print(f"Failed to move {file_name}: {e}")
+        messagebox.showinfo("Success", "Files have been reorganized successfully!")
+    
+    threading.Thread(target=move_batch).start()
 
 # Main function to categorize files and move them
 def main(folder_path):
