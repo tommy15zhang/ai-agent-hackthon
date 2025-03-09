@@ -9,8 +9,9 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 
 # Import backend functions
-from demo_single import generate_directory_tree, create_gpt_prompt, get_gpt_suggestion, parse_and_organize_files
-from Read_file import AI_Response, encode_resized_image, extract_text, analyze_image, execute_commands
+from demo_single import create_gpt_prompt, get_gpt_suggestion, parse_and_organize_files
+
+from tree_structure import generate_directory_tree
 
 class GenerateStructureThread(QThread):
     """Background thread to generate the proposed structure without freezing the UI."""
