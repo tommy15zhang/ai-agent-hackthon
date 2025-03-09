@@ -12,7 +12,7 @@ from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from demo_single import create_gpt_prompt, get_gpt_suggestion, parse_and_organize_files
 
 from tree_structure import generate_directory_tree
-
+import dan
 class GenerateStructureThread(QThread):
     """Background thread to generate the proposed structure without freezing the UI."""
     progress = pyqtSignal(int)  # Signal for updating progress bar
@@ -41,7 +41,9 @@ class GenerateStructureThread(QThread):
             proposed_structure = get_gpt_suggestion(prompt)
           
         elif self.mode == "metadata":
-            pass
+            metadata = dan.get_file_metadata(directory_tree)
+            prompt = dan.prepare_prompt(metadata)
+            proposed_structure = dan.categorize_files_with_gpt4(prompt)
           
         elif self.mode == "content":
             proposed_structure = AI_Response(self.directory)
@@ -175,8 +177,7 @@ class DirectoryOrganizerGUI(QMainWindow):
                 if self.mode == "name":
                     parse_and_organize_files(proposed_structure, self.base_dir)
                 elif self.mode == "metadata":
-                    # TODO: Replace with parse_and_organize_files_by_metadata
-                    pass  # <-- fill in appropriate logic
+                    dan.move_files_to_hierarchy(self.base_dir, proposed_structure)
                 elif self.mode == "content":
                     execute_commands(proposed_structure, self.base_dir)
 
